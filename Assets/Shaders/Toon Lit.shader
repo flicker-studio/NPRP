@@ -99,6 +99,8 @@
                 //rotation is the matrix of model space to tangent space
                 float3 bi_normal = cross(app_data.normal, app_data.tangent.xyz) * app_data.tangent.w;
                 const float3x3 rotation = float3x3(app_data.tangent.xyz, bi_normal, app_data.normal.xyz);
+
+                //Remapping [0,1] to [-1,1]
                 float3 a_normal = app_data.color.rgb * 2 - 1;
                 a_normal = normalize(mul(transpose(rotation), a_normal));
 
@@ -109,7 +111,9 @@
                 //Transform the vertex near the upper right corner of the clipping plane to view space
                 const float aspect = _ScreenParams.x / _ScreenParams.y;
                 ndc_normal.x /= aspect;
-                vertex_position.xy += 0.05 * _OutlineWidth * ndc_normal.xy;
+
+                //vertex offset
+                vertex_position.xy += 0.01 * _OutlineWidth * ndc_normal.xy;
 
                 //Output to frag
                 output.position = vertex_position;
