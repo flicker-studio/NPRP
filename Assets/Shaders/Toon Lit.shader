@@ -113,7 +113,8 @@
                 ndc_normal.x /= aspect;
 
                 //vertex offset
-                vertex_position.xy += 0.01 * _OutlineWidth * ndc_normal.xy;
+                const float outline_clamp = clamp(1 / vertex_position.w, 0, 1);
+                vertex_position.xy += 0.01 * _OutlineWidth * ndc_normal.xy * outline_clamp;
 
                 //Output to frag
                 output.position = vertex_position;
