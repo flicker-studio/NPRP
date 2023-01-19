@@ -1,21 +1,27 @@
 # URP-ToonRender
-简单易用的卡通渲染shader
 
-## 版本要求（其余版本兼容性尚未验证）
+Simple and easy-to-use toon rendering shader
+
+## Version requirements
+
+> Warning:Compatibility of other versions has not been verified!
+
 - Unity 2021.3.6
 - URP 12.1.7
 
-## 正在开发
-- ~~基于Back facing的自定义颜色描边~~
-- ~~基于Job System的高性能法线平滑工具~~
-- 描边效果在不同情况下的优化
+## Features
 
-## 当前功能
-- [ ] 法线外扩描边
-- [ ] 平滑面部阴影
-- [ ] 双色阶着色
-- [ ] 后处理着色
-- [ ] 多光源着色
+- [x] Clear back facing outline
+- [x] Efficient editor tool for smooth normals
+- [ ] Smooth face shadows
+- [ ] Cel shading
+- [ ] Post-processing shading
+- [ ] Multi-light shading
 
-## 安装方式
-开发中，预计以Unity组件包的方式提供
+## Contribution
+
+If you are going to contribute to this project please contact me first, we need to make sure we are not doing the same thing.
+
+## Install
+
+It's still under the development and is expected to be provided in Unity Package Manager.
