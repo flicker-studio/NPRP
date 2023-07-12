@@ -28,7 +28,7 @@ public class OutlineModelImporter : AssetPostprocessor
         var copyPath = Application.dataPath + "/" + dstPath[7..];
         if (File.Exists(copyPath))
         {
-            //If it exists, smooth its normal
+            //If the object exists, smooth its normal
             var copy = AssetDatabase.LoadAssetAtPath<GameObject>(dstPath);
 
             var originalMesh = GetMesh(modelObject);
@@ -72,7 +72,7 @@ public class OutlineModelImporter : AssetPostprocessor
     /// <summary>
     ///     Get all meshes in the model and children,MeshFilter and SkinnedMesh
     /// </summary>
-    /// <param name="go">target model</param>
+    /// <param name="go">Target model</param>
     /// <returns>The meshes dictionary </returns>
     private Dictionary<string, Mesh> GetMesh(GameObject go)
     {
@@ -92,7 +92,7 @@ public class OutlineModelImporter : AssetPostprocessor
         var smoothedMeshVertexCount = smoothedMesh.vertexCount;
         var originalMeshVertexCount = originalMesh.vertexCount;
 
-        // original data
+        // Original data
         var originalNormals = new NativeArray<Vector3>(originalMesh.normals, Allocator.Persistent);
         var originalVertices = new NativeArray<Vector3>(originalMesh.vertices, Allocator.Persistent);
         var originalTangents = new NativeArray<Vector4>(originalMesh.tangents, Allocator.Persistent);
@@ -100,12 +100,12 @@ public class OutlineModelImporter : AssetPostprocessor
         var existColors = originalMesh.colors.Length == originalMeshVertexCount;
         if (existColors) originalColors.CopyFrom(originalMesh.colors);
 
-        // smoothed data
+        // Smoothed data
         var smoothedNormals = new NativeArray<Vector3>(smoothedMesh.normals, Allocator.Persistent);
         var smoothedVertices = new NativeArray<Vector3>(smoothedMesh.vertices, Allocator.Persistent);
         var targetNormals = new NativeArray<Vector3>(smoothedMeshVertexCount, Allocator.Persistent);
 
-        //result data
+        // Result data
         var result =
             new NativeParallelMultiHashMap<Vector3, Vector3>(originalMeshVertexCount * 3, Allocator.Persistent);
         var resultParallel = result.AsParallelWriter();
@@ -114,7 +114,7 @@ public class OutlineModelImporter : AssetPostprocessor
         var normalBakeJob = new BakeNormalJob(originalVertices, originalNormals, originalTangents, result, existColors,
             originalColors);
 
-        //Job execution
+        // Job execution
         normalBakeJob.Schedule(originalMeshVertexCount, 100,
             collectNormalJob.Schedule(smoothedMeshVertexCount, 100)).Complete();
 
@@ -122,7 +122,7 @@ public class OutlineModelImporter : AssetPostprocessor
         var resultColors = new Color[originalColors.Length];
         originalColors.CopyTo(resultColors);
 
-        // release memory
+        // Release memory
         smoothedNormals.Dispose();
         smoothedVertices.Dispose();
         targetNormals.Dispose();
