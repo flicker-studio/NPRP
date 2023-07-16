@@ -4,10 +4,16 @@ Simple and easy-to-use toon rendering shader
 
 ## Version requirements
 
-> Warning:Compatibility of other versions has not been verified!
+> **Warning**! Compatibility of other versions has not been verified!
+> 
+> There is already a compatibility [issue](https://github.com/Morsiusiurandum/URP-ToonRender/issues/1) about the package.
 
-- Unity 2021.3.6
-- URP 12.1.7
+- URP 12.1.7+
+- Collection 2.1.4+
+
+## Development environment
+
+- Unity 2022.3.4f1
 
 ## Features
 
@@ -20,8 +26,10 @@ Simple and easy-to-use toon rendering shader
 
 ## Contribution
 
-If you are going to contribute to this project please contact me first, we need to make sure we are not doing the same thing.
+If you are going to contribute to this project, please contact me first.We need to make sure we are not doing the same thing.
 
 ## Install
 
 It's still under the development and is expected to be provided in Unity Package Manager.
+
+>THIS WILL BE THE NEXT TARGET!
