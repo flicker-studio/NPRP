@@ -21,9 +21,10 @@
             "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline"
         }
         LOD 100
-        //Render pass
+
         Pass
         {
+            Name "Base"
             Tags
             {
                 "LightMode" = "UniversalForward"
@@ -35,13 +36,15 @@
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
-            CBUFFER_START(UnityPerMaterial)
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
+            CBUFFER_START(UnityPerMaterial)
             float4 _BaseColor;
             float4 _ShadowColor;
             float1 _ShadowRange;
             float1 _ShadowSmooth;
+            float4 _OutlineColor;
+            float1 _OutlineWidth;
             CBUFFER_END
 
             struct app_data
@@ -78,18 +81,19 @@
             {
                 const float4 shadow_coords = TransformWorldToShadowCoord(vertex_data.world_position);
                 const Light main_light = GetMainLight(shadow_coords);
-                const float1 main_light_color = main_light.color;
+                const float3 main_light_color = main_light.color;
                 const float3 main_light_direction = normalize(main_light.direction);
-                const float3 view_direction = normalize(_WorldSpaceCameraPos.xyz - vertex_data.world_position.xyz);
+                
+                //const float3 view_direction = normalize(_WorldSpaceCameraPos.xyz - vertex_data.world_position.xyz);
                 const float1 half_lambert_shadow = dot(vertex_data.world_normal, main_light_direction) * 0.5 + 0.5;
 
                 const float4 base_texture_color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, vertex_data.uv);
 
                 const float1 ramp_smooth = smoothstep(0, _ShadowSmooth, half_lambert_shadow - _ShadowRange);
-                const float3 diffuse_color = lerp(_ShadowColor, _BaseColor, ramp_smooth);
+                const float3 diffuse_color = lerp(_ShadowColor, _BaseColor, ramp_smooth.x).xyz;
 
                 float4 color = 1;
-                color.rgb = diffuse_color * base_texture_color * main_light_color;
+                color.rgb = diffuse_color * base_texture_color.rgb * main_light_color;
                 return color;
             }
             ENDHLSL
@@ -98,6 +102,7 @@
         //Outline pass
         Pass
         {
+            Name "Outline"
             Tags
             {
                 "LightMode" = "SRPDefaultUnlit"
@@ -107,9 +112,14 @@
             #pragma vertex vert
             #pragma fragment frag
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "./Build-in.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
+            float4 _BaseColor;
+            float4 _ShadowColor;
+            float1 _ShadowRange;
+            float1 _ShadowSmooth;
             float4 _OutlineColor;
             float1 _OutlineWidth;
             CBUFFER_END
@@ -135,7 +145,8 @@
                 float4 vertex_position = position_inputs.positionCS;
 
                 //rotation is the matrix of model space to tangent space
-                float3 bi_normal = cross(app_data.object_normal, app_data.object_tangent.xyz) * app_data.object_tangent.w;
+                float3 bi_normal = cross(app_data.object_normal.xyz, app_data.object_tangent.xyz) * app_data.
+                    object_tangent.w;
                 const float3x3 rotation = float3x3(app_data.object_tangent.xyz, bi_normal, app_data.object_normal.xyz);
 
                 //Remapping [0,1] to [-1,1]
