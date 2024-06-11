@@ -1,35 +1,17 @@
-# URP-ToonRender
+# NPRP
 
-Simple and easy-to-use toon rendering shader
+NPRP is a Non-photorealistic Render Pipeline for Unity Engine. It is modeled after Unity Technology's Universal Render Pipeline but favors non-photorealistic visuals.
 
-## Version requirements
-
-> **Warning**! Compatibility of other versions has not been verified!
-> 
-> There is already a compatibility [issue](https://github.com/Morsiusiurandum/URP-ToonRender/issues/1) about the package.
-
-- URP 12.1.7+
-- Collection 2.1.4+
-
-## Development environment
-
-- Unity 2022.3.4f1
-
-## Features
-
-- [x] Clear back facing outline
-- [x] Efficient editor tool for smooth normals
-- [ ] Smooth face shadows
-- [ ] Cel shading
-- [ ] Post-processing shading
-- [ ] Multi-light shading
+> Its predecessors were some toon shaders under URP. You can get the source code [here](https://github.com/flicker-studio/NPRP/releases/tag/v0.1.0-alpha).
 
 ## Contribution
 
-If you are going to contribute to this project, please contact me first.We need to make sure we are not doing the same thing.
+If you will contribute to this project, check out the [roadmap](https://github.com/orgs/flicker-studio/projects/2) and start your work. We need to make sure we are not doing the same thing.
+
+## Contributors
+
+* @Morsiusiurandum
 
 ## Install
 
-It's still under the development and is expected to be provided in Unity Package Manager.
-
->THIS WILL BE THE NEXT TARGET!
+It's still under development and expected to provide in Unity Package Manager after finishing the first version.
