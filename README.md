@@ -17,9 +17,35 @@ If you will contribute to this project, check out the [roadmap](https://github.c
 ### Collaborators
 
 <!-- readme: collaborators -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/Morsiusiurandum">
+                    <img src="https://avatars.githubusercontent.com/u/57664245?v=4" width="100;" alt="Morsiusiurandum"/>
+                    <br />
+                    <sub><b>Zzz</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: collaborators -end -->
 
 ### Contributors
 
 <!-- readme: contributors -start -->
+<table>
+	<tbody>
+		<tr>
+            <td align="center">
+                <a href="https://github.com/Morsiusiurandum">
+                    <img src="https://avatars.githubusercontent.com/u/57664245?v=4" width="100;" alt="Morsiusiurandum"/>
+                    <br />
+                    <sub><b>Zzz</b></sub>
+                </a>
+            </td>
+		</tr>
+	<tbody>
+</table>
 <!-- readme: contributors -end -->
