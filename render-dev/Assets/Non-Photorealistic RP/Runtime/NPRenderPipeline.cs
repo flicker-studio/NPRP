@@ -9,14 +9,17 @@ namespace Non_Photorealistic_RP.Runtime
     /// </summary>
     public class NPRenderPipeline : RenderPipeline
     {
+        private readonly CameraRenderer _renderer = new();
+
         ///<inheritdoc />
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)
         {
         }
-        
+
         ///<inheritdoc />
         protected override void Render(ScriptableRenderContext context, List<Camera> cameras)
         {
+            foreach (var camera in cameras) _renderer.Render(context, camera);
         }
     }
 }
