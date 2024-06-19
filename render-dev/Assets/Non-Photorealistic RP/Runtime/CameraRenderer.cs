@@ -12,6 +12,12 @@ namespace Non_Photorealistic_RP.Runtime
         private                 ScriptableRenderContext _context;
         private                 CullingResults          _cullingResults;
         private static readonly ShaderTagId             UnlitShaderTagId = new("SRPDefaultUnlit");
+        private const           string                  BufferName       = "Render Camera";
+
+        private readonly CommandBuffer _buffer = new()
+                                                 {
+                                                     name = BufferName
+                                                 };
 
         /// <summary>
         ///     command a rendering to one camera
@@ -23,32 +29,33 @@ namespace Non_Photorealistic_RP.Runtime
             _context = context;
             _camera  = camera;
 
-            if (!Cull()) return;
-
-            const string bufferName = "Render Camera";
-
-            var buffer = new CommandBuffer
-                         {
-                             name = bufferName
-                         };
-            //hand the camera's projection matrix to the context
-            context.SetupCameraProperties(camera);
-            buffer.ClearRenderTarget(true, true, Color.clear);
-            buffer.BeginSample(bufferName);
-            context.ExecuteCommandBuffer(buffer);
-            buffer.Clear();
-
+            // PrepareBuffer();
+            PrepareForSceneWindow();
+            Cull();
+            Setup();
             DrawVisibleGeometry();
-
-            #if UNITY_EDITOR
             DrawUnsupportedShaders();
-            #endif
+            DrawGizmos();
+            Submit();
+        }
 
-            buffer.EndSample(bufferName);
-            context.ExecuteCommandBuffer(buffer);
-            buffer.Clear();
+        private void Setup()
+        {
+            //hand the camera's projection matrix to the context
+            _context.SetupCameraProperties(_camera);
+            _buffer.ClearRenderTarget(true, true, Color.clear);
+            _buffer.BeginSample(BufferName);
+            _context.ExecuteCommandBuffer(_buffer);
+            _buffer.Clear();
+        }
+
+        private void Submit()
+        {
+            _buffer.EndSample(BufferName);
+            _context.ExecuteCommandBuffer(_buffer);
+            _buffer.Clear();
             //submit a rendering request
-            context.Submit();
+            _context.Submit();
         }
 
         private void DrawVisibleGeometry()
@@ -77,11 +84,10 @@ namespace Non_Photorealistic_RP.Runtime
         ///     camera viewport culling
         /// </summary>
         /// <returns>return true when the culling task is successfully executed</returns>
-        private bool Cull()
+        private void Cull()
         {
-            if (!_camera.TryGetCullingParameters(out var p)) return false;
+            if (!_camera.TryGetCullingParameters(out var p)) return;
             _cullingResults = _context.Cull(ref p);
-            return true;
         }
     }
 }

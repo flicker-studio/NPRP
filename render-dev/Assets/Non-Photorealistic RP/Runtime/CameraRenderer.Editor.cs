@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.Rendering;
 
 namespace Non_Photorealistic_RP.Runtime
@@ -8,6 +9,10 @@ namespace Non_Photorealistic_RP.Runtime
     /// </summary>
     public partial class CameraRenderer
     {
+        partial void DrawGizmos();
+        partial void DrawUnsupportedShaders();
+        partial void PrepareForSceneWindow();
+        partial void PrepareBuffer();
         #if UNITY_EDITOR
 
         private static readonly ShaderTagId[] legacyShaderTagIds =
@@ -22,7 +27,14 @@ namespace Non_Photorealistic_RP.Runtime
 
         private static Material errorMaterial;
 
-        private void DrawUnsupportedShaders()
+        partial void DrawGizmos()
+        {
+            if (!Handles.ShouldRenderGizmos()) return;
+            _context.DrawGizmos(_camera, GizmoSubset.PreImageEffects);
+            _context.DrawGizmos(_camera, GizmoSubset.PostImageEffects);
+        }
+
+        partial void DrawUnsupportedShaders()
         {
             if (errorMaterial == null)
                 errorMaterial =
@@ -38,6 +50,17 @@ namespace Non_Photorealistic_RP.Runtime
 
             var filteringSettings = FilteringSettings.defaultValue;
             _context.DrawRenderers(_cullingResults, ref drawingSettings, ref filteringSettings);
+        }
+
+        partial void PrepareForSceneWindow()
+        {
+            if (_camera.cameraType == CameraType.SceneView)
+                ScriptableRenderContext.EmitWorldGeometryForSceneView(_camera);
+        }
+
+        partial void PrepareBuffer()
+        {
+            _buffer.name = _camera.name;
         }
 
         #endif
