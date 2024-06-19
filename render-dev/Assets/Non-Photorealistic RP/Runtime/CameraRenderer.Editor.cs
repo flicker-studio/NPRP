@@ -1,5 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.Rendering;
 
 namespace Non_Photorealistic_RP.Runtime
@@ -13,9 +14,12 @@ namespace Non_Photorealistic_RP.Runtime
         partial void DrawUnsupportedShaders();
         partial void PrepareForSceneWindow();
         partial void PrepareBuffer();
+
         #if UNITY_EDITOR
 
-        private static readonly ShaderTagId[] legacyShaderTagIds =
+        private string SampleName { get; set; }
+
+        private static readonly ShaderTagId[] LegacyShaderTagIds =
         {
             new("Always"),
             new("ForwardBase"),
@@ -25,7 +29,7 @@ namespace Non_Photorealistic_RP.Runtime
             new("VertexLM")
         };
 
-        private static Material errorMaterial;
+        private static Material _errorMaterial;
 
         partial void DrawGizmos()
         {
@@ -36,17 +40,17 @@ namespace Non_Photorealistic_RP.Runtime
 
         partial void DrawUnsupportedShaders()
         {
-            if (errorMaterial == null)
-                errorMaterial =
+            if (_errorMaterial == null)
+                _errorMaterial =
                     new Material(Shader.Find("Hidden/InternalErrorShader"));
 
-            var drawingSettings = new DrawingSettings(legacyShaderTagIds[0], new SortingSettings(_camera))
+            var drawingSettings = new DrawingSettings(LegacyShaderTagIds[0], new SortingSettings(_camera))
                                   {
-                                      overrideMaterial = errorMaterial
+                                      overrideMaterial = _errorMaterial
                                   };
 
-            for (var i = 1; i < legacyShaderTagIds.Length; i++)
-                drawingSettings.SetShaderPassName(i, legacyShaderTagIds[i]);
+            for (var i = 1; i < LegacyShaderTagIds.Length; i++)
+                drawingSettings.SetShaderPassName(i, LegacyShaderTagIds[i]);
 
             var filteringSettings = FilteringSettings.defaultValue;
             _context.DrawRenderers(_cullingResults, ref drawingSettings, ref filteringSettings);
@@ -60,8 +64,13 @@ namespace Non_Photorealistic_RP.Runtime
 
         partial void PrepareBuffer()
         {
-            _buffer.name = _camera.name;
+            Profiler.BeginSample("Editor Only");
+            _buffer.name = SampleName = _camera.name;
+            Profiler.EndSample();
         }
+
+        #else
+        const string SampleName => BufferName;
 
         #endif
     }

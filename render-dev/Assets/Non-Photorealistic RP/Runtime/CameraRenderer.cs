@@ -29,7 +29,7 @@ namespace Non_Photorealistic_RP.Runtime
             _context = context;
             _camera  = camera;
 
-            // PrepareBuffer();
+            PrepareBuffer();
             PrepareForSceneWindow();
             Cull();
             Setup();
@@ -43,15 +43,21 @@ namespace Non_Photorealistic_RP.Runtime
         {
             //hand the camera's projection matrix to the context
             _context.SetupCameraProperties(_camera);
-            _buffer.ClearRenderTarget(true, true, Color.clear);
-            _buffer.BeginSample(BufferName);
+            var flags = _camera.clearFlags;
+            _buffer.ClearRenderTarget
+                (
+                 flags <= CameraClearFlags.Depth,
+                 flags == CameraClearFlags.Color,
+                 flags == CameraClearFlags.Color ? _camera.backgroundColor.linear : Color.clear
+                );
+            _buffer.BeginSample(SampleName);
             _context.ExecuteCommandBuffer(_buffer);
             _buffer.Clear();
         }
 
         private void Submit()
         {
-            _buffer.EndSample(BufferName);
+            _buffer.EndSample(SampleName);
             _context.ExecuteCommandBuffer(_buffer);
             _buffer.Clear();
             //submit a rendering request
