@@ -6,7 +6,7 @@ namespace Non_Photorealistic_RP.Runtime
     /// <summary>
     ///     All the render instructions will be sent here, and it will render every camera
     /// </summary>
-    public class CameraRenderer
+    public partial class CameraRenderer
     {
         private                 Camera                  _camera;
         private                 ScriptableRenderContext _context;
@@ -39,6 +39,10 @@ namespace Non_Photorealistic_RP.Runtime
             buffer.Clear();
 
             DrawVisibleGeometry();
+
+            #if UNITY_EDITOR
+            DrawUnsupportedShaders();
+            #endif
 
             buffer.EndSample(bufferName);
             context.ExecuteCommandBuffer(buffer);
