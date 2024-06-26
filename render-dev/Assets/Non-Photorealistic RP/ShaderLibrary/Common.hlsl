@@ -1,16 +1,20 @@
 ﻿#ifndef NPRP_COMMON_HLSL
 #define NPRP_COMMON_HLSL
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
 #include "UnityInput.hlsl"
 
-float3 transform_object_to_world(float3 position_os)
-{
-    return mul(unity_ObjectToWorld, float4(position_os, 1.0)).xyz;
-}
+#define UNITY_MATRIX_M unity_ObjectToWorld
+#define UNITY_MATRIX_I_M unity_WorldToObject
+#define UNITY_MATRIX_V unity_MatrixV
+#define UNITY_MATRIX_VP unity_MatrixVP
+#define UNITY_MATRIX_P glstate_matrix_projection
 
+//Required in Unity 2022
+#define UNITY_MATRIX_I_V unity_MatrixInvV
+#define UNITY_PREV_MATRIX_M unity_prev_MatrixM
+#define UNITY_PREV_MATRIX_I_M unity_prev_MatrixIM
 
-float4 transform_world_to_h_clip(float3 position_ws)
-{
-    return mul(unity_MatrixVP, float4(position_ws, 1.0));
-}
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
+
 #endif
