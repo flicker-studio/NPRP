@@ -11,6 +11,14 @@ namespace Non_Photorealistic_RP.Runtime
     {
         private readonly CameraRenderer _renderer = new();
 
+        /// <summary>
+        ///     Enable SRP batch processing
+        /// </summary>
+        public NPRenderPipeline()
+        {
+            GraphicsSettings.useScriptableRenderPipelineBatching = true;
+        }
+
         ///<inheritdoc />
         protected override void Render(ScriptableRenderContext context, Camera[] cameras)
         {

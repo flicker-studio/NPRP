@@ -3,12 +3,14 @@
 
 #include "../ShaderLibrary/Common.hlsl"
 
-float4 _BaseColor;
+CBUFFER_START(UnityPerMaterial)
+    float4 _BaseColor;
+CBUFFER_END
 
 float4 unlit_pass_vertex(float3 position_os : POSITION) : SV_POSITION
 {
     const float3 position_ws = TransformObjectToWorld(position_os.xyz);
-    return TransformObjectToHClip(position_ws);
+    return TransformWorldToHClip(position_ws);
 }
 
 float4 unlit_pass_fragment() : SV_TARGET
