@@ -13,6 +13,7 @@ Shader "Non-Photorealistic RP/Unlit"
         {
             HLSLPROGRAM
             #include "UnlitPass.hlsl"
+            #pragma multi_compile_instancing
             #pragma vertex unlit_pass_vertex
             #pragma fragment unlit_pass_fragment
             ENDHLSL

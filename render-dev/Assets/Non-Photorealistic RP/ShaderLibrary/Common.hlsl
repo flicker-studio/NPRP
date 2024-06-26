@@ -1,4 +1,5 @@
-﻿#ifndef NPRP_COMMON_HLSL
+﻿// ReSharper disable CppUnusedIncludeDirective
+#ifndef NPRP_COMMON_HLSL
 #define NPRP_COMMON_HLSL
 
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Common.hlsl"
@@ -15,6 +16,7 @@
 #define UNITY_PREV_MATRIX_M unity_prev_MatrixM
 #define UNITY_PREV_MATRIX_I_M unity_prev_MatrixIM
 
+#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/UnityInstancing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/SpaceTransforms.hlsl"
 
 #endif
